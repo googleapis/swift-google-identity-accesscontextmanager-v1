@@ -16,7 +16,7 @@
 
 import Foundation
 import GoogleCloudWkt
-import GoogleIdentityAccesscontextmanagerType
+import GoogleIdentityAccessContextManagerType
 
 /// `DevicePolicy` specifies device specific restrictions necessary to acquire a
 /// given access level. A `DevicePolicy` specifies requirements for requests from
@@ -36,7 +36,7 @@ public struct DevicePolicy: Codable, Equatable, GoogleCloudWkt._AnyPackable,
 
   /// Allowed encryptions statuses, an empty list allows all statuses.
   public var allowedEncryptionStatuses:
-    [GoogleIdentityAccesscontextmanagerType.DeviceEncryptionStatus] = []
+    [GoogleIdentityAccessContextManagerType.DeviceEncryptionStatus] = []
 
   /// Allowed OS versions, an empty list allows all types and all versions.
   public var osConstraints: [OsConstraint] = []
@@ -44,7 +44,7 @@ public struct DevicePolicy: Codable, Equatable, GoogleCloudWkt._AnyPackable,
   /// Allowed device management levels, an empty list allows all management
   /// levels.
   public var allowedDeviceManagementLevels:
-    [GoogleIdentityAccesscontextmanagerType.DeviceManagementLevel] = []
+    [GoogleIdentityAccessContextManagerType.DeviceManagementLevel] = []
 
   /// Whether the device needs to be approved by the customer admin.
   public var requireAdminApproval: Swift.Bool = Swift.Bool()

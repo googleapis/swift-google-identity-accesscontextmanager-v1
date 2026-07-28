@@ -19,7 +19,7 @@ import Foundation
   import FoundationNetworking
 #endif
 import GoogleCloudWkt
-import GoogleIamV1
+import GoogleIAMV1
 import GoogleLongrunning
 import GoogleRpc
 import GoogleCloudGax
@@ -28,11 +28,11 @@ extension Clients {
   protocol AccessContextManagerStub {
     func listAccessPolicies(
       request: ListAccessPoliciesRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleIdentityAccesscontextmanagerV1.ListAccessPoliciesResponse
+    ) async throws -> GoogleIdentityAccessContextManagerV1.ListAccessPoliciesResponse
 
     func getAccessPolicy(
       request: GetAccessPolicyRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleIdentityAccesscontextmanagerV1.AccessPolicy
+    ) async throws -> GoogleIdentityAccessContextManagerV1.AccessPolicy
 
     func createAccessPolicy(
       request: AccessPolicy, options: GoogleCloudGax.RequestOptions
@@ -48,11 +48,11 @@ extension Clients {
 
     func listAccessLevels(
       request: ListAccessLevelsRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleIdentityAccesscontextmanagerV1.ListAccessLevelsResponse
+    ) async throws -> GoogleIdentityAccessContextManagerV1.ListAccessLevelsResponse
 
     func getAccessLevel(
       request: GetAccessLevelRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleIdentityAccesscontextmanagerV1.AccessLevel
+    ) async throws -> GoogleIdentityAccessContextManagerV1.AccessLevel
 
     func createAccessLevel(
       request: CreateAccessLevelRequest, options: GoogleCloudGax.RequestOptions
@@ -72,11 +72,11 @@ extension Clients {
 
     func listServicePerimeters(
       request: ListServicePerimetersRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleIdentityAccesscontextmanagerV1.ListServicePerimetersResponse
+    ) async throws -> GoogleIdentityAccessContextManagerV1.ListServicePerimetersResponse
 
     func getServicePerimeter(
       request: GetServicePerimeterRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleIdentityAccesscontextmanagerV1.ServicePerimeter
+    ) async throws -> GoogleIdentityAccessContextManagerV1.ServicePerimeter
 
     func createServicePerimeter(
       request: CreateServicePerimeterRequest, options: GoogleCloudGax.RequestOptions
@@ -100,11 +100,11 @@ extension Clients {
 
     func listGcpUserAccessBindings(
       request: ListGcpUserAccessBindingsRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleIdentityAccesscontextmanagerV1.ListGcpUserAccessBindingsResponse
+    ) async throws -> GoogleIdentityAccessContextManagerV1.ListGcpUserAccessBindingsResponse
 
     func getGcpUserAccessBinding(
       request: GetGcpUserAccessBindingRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleIdentityAccesscontextmanagerV1.GcpUserAccessBinding
+    ) async throws -> GoogleIdentityAccessContextManagerV1.GcpUserAccessBinding
 
     func createGcpUserAccessBinding(
       request: CreateGcpUserAccessBindingRequest, options: GoogleCloudGax.RequestOptions
@@ -119,16 +119,16 @@ extension Clients {
     ) async throws -> GoogleLongrunning.Operation
 
     func setIamPolicy(
-      request: GoogleIamV1.SetIamPolicyRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleIamV1.Policy
+      request: GoogleIAMV1.SetIamPolicyRequest, options: GoogleCloudGax.RequestOptions
+    ) async throws -> GoogleIAMV1.Policy
 
     func getIamPolicy(
-      request: GoogleIamV1.GetIamPolicyRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleIamV1.Policy
+      request: GoogleIAMV1.GetIamPolicyRequest, options: GoogleCloudGax.RequestOptions
+    ) async throws -> GoogleIAMV1.Policy
 
     func testIamPermissions(
-      request: GoogleIamV1.TestIamPermissionsRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleIamV1.TestIamPermissionsResponse
+      request: GoogleIAMV1.TestIamPermissionsRequest, options: GoogleCloudGax.RequestOptions
+    ) async throws -> GoogleIAMV1.TestIamPermissionsResponse
 
     func getOperation(
       request: GoogleLongrunning.GetOperationRequest, options: GoogleCloudGax.RequestOptions
@@ -145,7 +145,7 @@ extension Clients {
 
     public func listAccessPolicies(
       request: ListAccessPoliciesRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleIdentityAccesscontextmanagerV1.ListAccessPoliciesResponse {
+    ) async throws -> GoogleIdentityAccessContextManagerV1.ListAccessPoliciesResponse {
       let path = try { () throws -> Swift.String in
         return "/v1/accessPolicies"
       }()
@@ -161,12 +161,12 @@ extension Clients {
       req.setValue(Clients.clientHeader, forHTTPHeaderField: "X-Goog-Api-Client")
       let (data, _) = try await self.inner.rpc(for: req).get()
       return try GoogleCloudWkt._ProtoJSONDecoder().decode(
-        GoogleIdentityAccesscontextmanagerV1.ListAccessPoliciesResponse.self, from: data)
+        GoogleIdentityAccessContextManagerV1.ListAccessPoliciesResponse.self, from: data)
     }
 
     public func getAccessPolicy(
       request: GetAccessPolicyRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleIdentityAccesscontextmanagerV1.AccessPolicy {
+    ) async throws -> GoogleIdentityAccessContextManagerV1.AccessPolicy {
       let path = try { () throws -> Swift.String in
         guard let pathVariable0 = request.name as Swift.String?, !pathVariable0.isEmpty else {
           throw GoogleCloudGax.RequestError.binding("'request.name' is not set or is empty")
@@ -181,7 +181,7 @@ extension Clients {
       req.setValue(Clients.clientHeader, forHTTPHeaderField: "X-Goog-Api-Client")
       let (data, _) = try await self.inner.rpc(for: req).get()
       return try GoogleCloudWkt._ProtoJSONDecoder().decode(
-        GoogleIdentityAccesscontextmanagerV1.AccessPolicy.self, from: data)
+        GoogleIdentityAccessContextManagerV1.AccessPolicy.self, from: data)
     }
 
     public func createAccessPolicy(
@@ -251,7 +251,7 @@ extension Clients {
 
     public func listAccessLevels(
       request: ListAccessLevelsRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleIdentityAccesscontextmanagerV1.ListAccessLevelsResponse {
+    ) async throws -> GoogleIdentityAccessContextManagerV1.ListAccessLevelsResponse {
       let path = try { () throws -> Swift.String in
         guard let pathVariable0 = request.parent as Swift.String?, !pathVariable0.isEmpty else {
           throw GoogleCloudGax.RequestError.binding("'request.parent' is not set or is empty")
@@ -271,12 +271,12 @@ extension Clients {
       req.setValue(Clients.clientHeader, forHTTPHeaderField: "X-Goog-Api-Client")
       let (data, _) = try await self.inner.rpc(for: req).get()
       return try GoogleCloudWkt._ProtoJSONDecoder().decode(
-        GoogleIdentityAccesscontextmanagerV1.ListAccessLevelsResponse.self, from: data)
+        GoogleIdentityAccessContextManagerV1.ListAccessLevelsResponse.self, from: data)
     }
 
     public func getAccessLevel(
       request: GetAccessLevelRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleIdentityAccesscontextmanagerV1.AccessLevel {
+    ) async throws -> GoogleIdentityAccessContextManagerV1.AccessLevel {
       let path = try { () throws -> Swift.String in
         guard let pathVariable0 = request.name as Swift.String?, !pathVariable0.isEmpty else {
           throw GoogleCloudGax.RequestError.binding("'request.name' is not set or is empty")
@@ -294,7 +294,7 @@ extension Clients {
       req.setValue(Clients.clientHeader, forHTTPHeaderField: "X-Goog-Api-Client")
       let (data, _) = try await self.inner.rpc(for: req).get()
       return try GoogleCloudWkt._ProtoJSONDecoder().decode(
-        GoogleIdentityAccesscontextmanagerV1.AccessLevel.self, from: data)
+        GoogleIdentityAccessContextManagerV1.AccessLevel.self, from: data)
     }
 
     public func createAccessLevel(
@@ -393,7 +393,7 @@ extension Clients {
 
     public func listServicePerimeters(
       request: ListServicePerimetersRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleIdentityAccesscontextmanagerV1.ListServicePerimetersResponse {
+    ) async throws -> GoogleIdentityAccessContextManagerV1.ListServicePerimetersResponse {
       let path = try { () throws -> Swift.String in
         guard let pathVariable0 = request.parent as Swift.String?, !pathVariable0.isEmpty else {
           throw GoogleCloudGax.RequestError.binding("'request.parent' is not set or is empty")
@@ -411,12 +411,12 @@ extension Clients {
       req.setValue(Clients.clientHeader, forHTTPHeaderField: "X-Goog-Api-Client")
       let (data, _) = try await self.inner.rpc(for: req).get()
       return try GoogleCloudWkt._ProtoJSONDecoder().decode(
-        GoogleIdentityAccesscontextmanagerV1.ListServicePerimetersResponse.self, from: data)
+        GoogleIdentityAccessContextManagerV1.ListServicePerimetersResponse.self, from: data)
     }
 
     public func getServicePerimeter(
       request: GetServicePerimeterRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleIdentityAccesscontextmanagerV1.ServicePerimeter {
+    ) async throws -> GoogleIdentityAccessContextManagerV1.ServicePerimeter {
       let path = try { () throws -> Swift.String in
         guard let pathVariable0 = request.name as Swift.String?, !pathVariable0.isEmpty else {
           throw GoogleCloudGax.RequestError.binding("'request.name' is not set or is empty")
@@ -431,7 +431,7 @@ extension Clients {
       req.setValue(Clients.clientHeader, forHTTPHeaderField: "X-Goog-Api-Client")
       let (data, _) = try await self.inner.rpc(for: req).get()
       return try GoogleCloudWkt._ProtoJSONDecoder().decode(
-        GoogleIdentityAccesscontextmanagerV1.ServicePerimeter.self, from: data)
+        GoogleIdentityAccessContextManagerV1.ServicePerimeter.self, from: data)
     }
 
     public func createServicePerimeter(
@@ -552,7 +552,7 @@ extension Clients {
 
     public func listGcpUserAccessBindings(
       request: ListGcpUserAccessBindingsRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleIdentityAccesscontextmanagerV1.ListGcpUserAccessBindingsResponse {
+    ) async throws -> GoogleIdentityAccessContextManagerV1.ListGcpUserAccessBindingsResponse {
       let path = try { () throws -> Swift.String in
         guard let pathVariable0 = request.parent as Swift.String?, !pathVariable0.isEmpty else {
           throw GoogleCloudGax.RequestError.binding("'request.parent' is not set or is empty")
@@ -570,12 +570,12 @@ extension Clients {
       req.setValue(Clients.clientHeader, forHTTPHeaderField: "X-Goog-Api-Client")
       let (data, _) = try await self.inner.rpc(for: req).get()
       return try GoogleCloudWkt._ProtoJSONDecoder().decode(
-        GoogleIdentityAccesscontextmanagerV1.ListGcpUserAccessBindingsResponse.self, from: data)
+        GoogleIdentityAccessContextManagerV1.ListGcpUserAccessBindingsResponse.self, from: data)
     }
 
     public func getGcpUserAccessBinding(
       request: GetGcpUserAccessBindingRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleIdentityAccesscontextmanagerV1.GcpUserAccessBinding {
+    ) async throws -> GoogleIdentityAccessContextManagerV1.GcpUserAccessBinding {
       let path = try { () throws -> Swift.String in
         guard let pathVariable0 = request.name as Swift.String?, !pathVariable0.isEmpty else {
           throw GoogleCloudGax.RequestError.binding("'request.name' is not set or is empty")
@@ -590,7 +590,7 @@ extension Clients {
       req.setValue(Clients.clientHeader, forHTTPHeaderField: "X-Goog-Api-Client")
       let (data, _) = try await self.inner.rpc(for: req).get()
       return try GoogleCloudWkt._ProtoJSONDecoder().decode(
-        GoogleIdentityAccesscontextmanagerV1.GcpUserAccessBinding.self, from: data)
+        GoogleIdentityAccessContextManagerV1.GcpUserAccessBinding.self, from: data)
     }
 
     public func createGcpUserAccessBinding(
@@ -667,8 +667,8 @@ extension Clients {
     }
 
     public func setIamPolicy(
-      request: GoogleIamV1.SetIamPolicyRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleIamV1.Policy {
+      request: GoogleIAMV1.SetIamPolicyRequest, options: GoogleCloudGax.RequestOptions
+    ) async throws -> GoogleIAMV1.Policy {
       let path = try { () throws -> Swift.String in
         guard let pathVariable0 = request.resource as Swift.String?, !pathVariable0.isEmpty else {
           throw GoogleCloudGax.RequestError.binding("'request.resource' is not set or is empty")
@@ -685,12 +685,12 @@ extension Clients {
       req.httpBody = try JSONEncoder().encode(request)
       let (data, _) = try await self.inner.rpc(for: req).get()
       return try GoogleCloudWkt._ProtoJSONDecoder().decode(
-        GoogleIamV1.Policy.self, from: data)
+        GoogleIAMV1.Policy.self, from: data)
     }
 
     public func getIamPolicy(
-      request: GoogleIamV1.GetIamPolicyRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleIamV1.Policy {
+      request: GoogleIAMV1.GetIamPolicyRequest, options: GoogleCloudGax.RequestOptions
+    ) async throws -> GoogleIAMV1.Policy {
       let path = try { () throws -> Swift.String in
         guard let pathVariable0 = request.resource as Swift.String?, !pathVariable0.isEmpty else {
           throw GoogleCloudGax.RequestError.binding("'request.resource' is not set or is empty")
@@ -707,12 +707,12 @@ extension Clients {
       req.httpBody = try JSONEncoder().encode(request)
       let (data, _) = try await self.inner.rpc(for: req).get()
       return try GoogleCloudWkt._ProtoJSONDecoder().decode(
-        GoogleIamV1.Policy.self, from: data)
+        GoogleIAMV1.Policy.self, from: data)
     }
 
     public func testIamPermissions(
-      request: GoogleIamV1.TestIamPermissionsRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleIamV1.TestIamPermissionsResponse {
+      request: GoogleIAMV1.TestIamPermissionsRequest, options: GoogleCloudGax.RequestOptions
+    ) async throws -> GoogleIAMV1.TestIamPermissionsResponse {
       let path = try { () throws -> Swift.String in
         guard let pathVariable0 = request.resource as Swift.String?, !pathVariable0.isEmpty else {
           throw GoogleCloudGax.RequestError.binding("'request.resource' is not set or is empty")
@@ -729,7 +729,7 @@ extension Clients {
       req.httpBody = try JSONEncoder().encode(request)
       let (data, _) = try await self.inner.rpc(for: req).get()
       return try GoogleCloudWkt._ProtoJSONDecoder().decode(
-        GoogleIamV1.TestIamPermissionsResponse.self, from: data)
+        GoogleIAMV1.TestIamPermissionsResponse.self, from: data)
     }
 
     public func getOperation(

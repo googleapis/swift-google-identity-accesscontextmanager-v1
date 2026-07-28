@@ -19,56 +19,48 @@ import Foundation
   import FoundationNetworking
 #endif
 import GoogleCloudWkt
-import GoogleIamV1
+import GoogleIAMV1
 import GoogleLongrunning
 import GoogleRpc
 import GoogleCloudGax
-import struct Logging.Logger
 
 extension Clients {
-  final class AccessContextManagerLogging: AccessContextManagerStub {
+  final class AccessContextManagerRetry: AccessContextManagerStub {
     let inner: any AccessContextManagerStub
-    let logger: Logger
+    let options: GoogleCloudGax.ClientOptions
 
-    public init(_ inner: any AccessContextManagerStub, logger: Logger) {
-      var logger = logger
-      logger[metadataKey: "gcp.artifact.id"] = "google-identity-accesscontextmanager-v1"
-      logger[metadataKey: "gcp.client.service"] = "accesscontextmanager"
-      logger[metadataKey: "gcp.experimental.swift.client"] = "AccessContextManager"
+    public init(_ inner: any AccessContextManagerStub, options: GoogleCloudGax.ClientOptions) {
       self.inner = inner
-      self.logger = logger
+      self.options = options
     }
 
     func _intercept<Input, Output>(
       request: Input,
       options: GoogleCloudGax.RequestOptions,
-      name: Swift.String,
+      idempotent: Swift.Bool,
       action: (Input, GoogleCloudGax.RequestOptions) async throws -> Output,
     ) async throws -> Output {
-      var logger = logger
-      logger[metadataKey: "gcp.experimental.swift.request.id"] = "\(UUID())"
-      logger[metadataKey: "gcp.experimental.swift.method"] = .string(name)
-      logger.debug("enter  : \(request) \(options)")
-      do {
-        let output = try await action(request, options)
-        logger.debug("success: \(request) \(options) \(output)")
-        return output
-      } catch let error {
-        logger.debug("error  : \(request) \(options) \(error)")
-        throw error
+      let loop = GoogleCloudGax._RetryLoop(
+        options: options, withDefault: self.options, idempotent: idempotent,
+      )
+      let attempt = { (attemptTimeout: Swift.Duration?) async throws -> Output in
+        var attemptOptions = options
+        attemptOptions.attemptTimeout = attemptTimeout
+        return try await action(request, attemptOptions)
       }
+      return try await loop.run(attempt: attempt)
     }
 
     public func listAccessPolicies(
       request: ListAccessPoliciesRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleIdentityAccesscontextmanagerV1.ListAccessPoliciesResponse {
+    ) async throws -> GoogleIdentityAccessContextManagerV1.ListAccessPoliciesResponse {
       try await self._intercept(
         request: request,
         options: options,
-        name: "listAccessPolicies",
+        idempotent: true,
         action: {
           (r: ListAccessPoliciesRequest, o: GoogleCloudGax.RequestOptions) async throws
-            -> GoogleIdentityAccesscontextmanagerV1.ListAccessPoliciesResponse
+            -> GoogleIdentityAccessContextManagerV1.ListAccessPoliciesResponse
           in
           return try await self.inner.listAccessPolicies(request: r, options: o)
         })
@@ -76,14 +68,14 @@ extension Clients {
 
     public func getAccessPolicy(
       request: GetAccessPolicyRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleIdentityAccesscontextmanagerV1.AccessPolicy {
+    ) async throws -> GoogleIdentityAccessContextManagerV1.AccessPolicy {
       try await self._intercept(
         request: request,
         options: options,
-        name: "getAccessPolicy",
+        idempotent: true,
         action: {
           (r: GetAccessPolicyRequest, o: GoogleCloudGax.RequestOptions) async throws
-            -> GoogleIdentityAccesscontextmanagerV1.AccessPolicy
+            -> GoogleIdentityAccessContextManagerV1.AccessPolicy
           in
           return try await self.inner.getAccessPolicy(request: r, options: o)
         })
@@ -95,7 +87,7 @@ extension Clients {
       try await self._intercept(
         request: request,
         options: options,
-        name: "createAccessPolicy",
+        idempotent: false,
         action: {
           (r: AccessPolicy, o: GoogleCloudGax.RequestOptions) async throws
             -> GoogleLongrunning.Operation
@@ -110,7 +102,7 @@ extension Clients {
       try await self._intercept(
         request: request,
         options: options,
-        name: "updateAccessPolicy",
+        idempotent: false,
         action: {
           (r: UpdateAccessPolicyRequest, o: GoogleCloudGax.RequestOptions) async throws
             -> GoogleLongrunning.Operation
@@ -125,7 +117,7 @@ extension Clients {
       try await self._intercept(
         request: request,
         options: options,
-        name: "deleteAccessPolicy",
+        idempotent: false,
         action: {
           (r: DeleteAccessPolicyRequest, o: GoogleCloudGax.RequestOptions) async throws
             -> GoogleLongrunning.Operation
@@ -136,14 +128,14 @@ extension Clients {
 
     public func listAccessLevels(
       request: ListAccessLevelsRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleIdentityAccesscontextmanagerV1.ListAccessLevelsResponse {
+    ) async throws -> GoogleIdentityAccessContextManagerV1.ListAccessLevelsResponse {
       try await self._intercept(
         request: request,
         options: options,
-        name: "listAccessLevels",
+        idempotent: true,
         action: {
           (r: ListAccessLevelsRequest, o: GoogleCloudGax.RequestOptions) async throws
-            -> GoogleIdentityAccesscontextmanagerV1.ListAccessLevelsResponse
+            -> GoogleIdentityAccessContextManagerV1.ListAccessLevelsResponse
           in
           return try await self.inner.listAccessLevels(request: r, options: o)
         })
@@ -151,14 +143,14 @@ extension Clients {
 
     public func getAccessLevel(
       request: GetAccessLevelRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleIdentityAccesscontextmanagerV1.AccessLevel {
+    ) async throws -> GoogleIdentityAccessContextManagerV1.AccessLevel {
       try await self._intercept(
         request: request,
         options: options,
-        name: "getAccessLevel",
+        idempotent: true,
         action: {
           (r: GetAccessLevelRequest, o: GoogleCloudGax.RequestOptions) async throws
-            -> GoogleIdentityAccesscontextmanagerV1.AccessLevel
+            -> GoogleIdentityAccessContextManagerV1.AccessLevel
           in
           return try await self.inner.getAccessLevel(request: r, options: o)
         })
@@ -170,7 +162,7 @@ extension Clients {
       try await self._intercept(
         request: request,
         options: options,
-        name: "createAccessLevel",
+        idempotent: false,
         action: {
           (r: CreateAccessLevelRequest, o: GoogleCloudGax.RequestOptions) async throws
             -> GoogleLongrunning.Operation
@@ -185,7 +177,7 @@ extension Clients {
       try await self._intercept(
         request: request,
         options: options,
-        name: "updateAccessLevel",
+        idempotent: false,
         action: {
           (r: UpdateAccessLevelRequest, o: GoogleCloudGax.RequestOptions) async throws
             -> GoogleLongrunning.Operation
@@ -200,7 +192,7 @@ extension Clients {
       try await self._intercept(
         request: request,
         options: options,
-        name: "deleteAccessLevel",
+        idempotent: false,
         action: {
           (r: DeleteAccessLevelRequest, o: GoogleCloudGax.RequestOptions) async throws
             -> GoogleLongrunning.Operation
@@ -215,7 +207,7 @@ extension Clients {
       try await self._intercept(
         request: request,
         options: options,
-        name: "replaceAccessLevels",
+        idempotent: false,
         action: {
           (r: ReplaceAccessLevelsRequest, o: GoogleCloudGax.RequestOptions) async throws
             -> GoogleLongrunning.Operation
@@ -226,14 +218,14 @@ extension Clients {
 
     public func listServicePerimeters(
       request: ListServicePerimetersRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleIdentityAccesscontextmanagerV1.ListServicePerimetersResponse {
+    ) async throws -> GoogleIdentityAccessContextManagerV1.ListServicePerimetersResponse {
       try await self._intercept(
         request: request,
         options: options,
-        name: "listServicePerimeters",
+        idempotent: true,
         action: {
           (r: ListServicePerimetersRequest, o: GoogleCloudGax.RequestOptions) async throws
-            -> GoogleIdentityAccesscontextmanagerV1.ListServicePerimetersResponse
+            -> GoogleIdentityAccessContextManagerV1.ListServicePerimetersResponse
           in
           return try await self.inner.listServicePerimeters(request: r, options: o)
         })
@@ -241,14 +233,14 @@ extension Clients {
 
     public func getServicePerimeter(
       request: GetServicePerimeterRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleIdentityAccesscontextmanagerV1.ServicePerimeter {
+    ) async throws -> GoogleIdentityAccessContextManagerV1.ServicePerimeter {
       try await self._intercept(
         request: request,
         options: options,
-        name: "getServicePerimeter",
+        idempotent: true,
         action: {
           (r: GetServicePerimeterRequest, o: GoogleCloudGax.RequestOptions) async throws
-            -> GoogleIdentityAccesscontextmanagerV1.ServicePerimeter
+            -> GoogleIdentityAccessContextManagerV1.ServicePerimeter
           in
           return try await self.inner.getServicePerimeter(request: r, options: o)
         })
@@ -260,7 +252,7 @@ extension Clients {
       try await self._intercept(
         request: request,
         options: options,
-        name: "createServicePerimeter",
+        idempotent: false,
         action: {
           (r: CreateServicePerimeterRequest, o: GoogleCloudGax.RequestOptions) async throws
             -> GoogleLongrunning.Operation
@@ -275,7 +267,7 @@ extension Clients {
       try await self._intercept(
         request: request,
         options: options,
-        name: "updateServicePerimeter",
+        idempotent: false,
         action: {
           (r: UpdateServicePerimeterRequest, o: GoogleCloudGax.RequestOptions) async throws
             -> GoogleLongrunning.Operation
@@ -290,7 +282,7 @@ extension Clients {
       try await self._intercept(
         request: request,
         options: options,
-        name: "deleteServicePerimeter",
+        idempotent: false,
         action: {
           (r: DeleteServicePerimeterRequest, o: GoogleCloudGax.RequestOptions) async throws
             -> GoogleLongrunning.Operation
@@ -305,7 +297,7 @@ extension Clients {
       try await self._intercept(
         request: request,
         options: options,
-        name: "replaceServicePerimeters",
+        idempotent: false,
         action: {
           (r: ReplaceServicePerimetersRequest, o: GoogleCloudGax.RequestOptions) async throws
             -> GoogleLongrunning.Operation
@@ -320,7 +312,7 @@ extension Clients {
       try await self._intercept(
         request: request,
         options: options,
-        name: "commitServicePerimeters",
+        idempotent: false,
         action: {
           (r: CommitServicePerimetersRequest, o: GoogleCloudGax.RequestOptions) async throws
             -> GoogleLongrunning.Operation
@@ -331,14 +323,14 @@ extension Clients {
 
     public func listGcpUserAccessBindings(
       request: ListGcpUserAccessBindingsRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleIdentityAccesscontextmanagerV1.ListGcpUserAccessBindingsResponse {
+    ) async throws -> GoogleIdentityAccessContextManagerV1.ListGcpUserAccessBindingsResponse {
       try await self._intercept(
         request: request,
         options: options,
-        name: "listGcpUserAccessBindings",
+        idempotent: true,
         action: {
           (r: ListGcpUserAccessBindingsRequest, o: GoogleCloudGax.RequestOptions) async throws
-            -> GoogleIdentityAccesscontextmanagerV1.ListGcpUserAccessBindingsResponse
+            -> GoogleIdentityAccessContextManagerV1.ListGcpUserAccessBindingsResponse
           in
           return try await self.inner.listGcpUserAccessBindings(request: r, options: o)
         })
@@ -346,14 +338,14 @@ extension Clients {
 
     public func getGcpUserAccessBinding(
       request: GetGcpUserAccessBindingRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleIdentityAccesscontextmanagerV1.GcpUserAccessBinding {
+    ) async throws -> GoogleIdentityAccessContextManagerV1.GcpUserAccessBinding {
       try await self._intercept(
         request: request,
         options: options,
-        name: "getGcpUserAccessBinding",
+        idempotent: true,
         action: {
           (r: GetGcpUserAccessBindingRequest, o: GoogleCloudGax.RequestOptions) async throws
-            -> GoogleIdentityAccesscontextmanagerV1.GcpUserAccessBinding
+            -> GoogleIdentityAccessContextManagerV1.GcpUserAccessBinding
           in
           return try await self.inner.getGcpUserAccessBinding(request: r, options: o)
         })
@@ -365,7 +357,7 @@ extension Clients {
       try await self._intercept(
         request: request,
         options: options,
-        name: "createGcpUserAccessBinding",
+        idempotent: false,
         action: {
           (r: CreateGcpUserAccessBindingRequest, o: GoogleCloudGax.RequestOptions) async throws
             -> GoogleLongrunning.Operation
@@ -380,7 +372,7 @@ extension Clients {
       try await self._intercept(
         request: request,
         options: options,
-        name: "updateGcpUserAccessBinding",
+        idempotent: false,
         action: {
           (r: UpdateGcpUserAccessBindingRequest, o: GoogleCloudGax.RequestOptions) async throws
             -> GoogleLongrunning.Operation
@@ -395,7 +387,7 @@ extension Clients {
       try await self._intercept(
         request: request,
         options: options,
-        name: "deleteGcpUserAccessBinding",
+        idempotent: false,
         action: {
           (r: DeleteGcpUserAccessBindingRequest, o: GoogleCloudGax.RequestOptions) async throws
             -> GoogleLongrunning.Operation
@@ -405,45 +397,45 @@ extension Clients {
     }
 
     public func setIamPolicy(
-      request: GoogleIamV1.SetIamPolicyRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleIamV1.Policy {
+      request: GoogleIAMV1.SetIamPolicyRequest, options: GoogleCloudGax.RequestOptions
+    ) async throws -> GoogleIAMV1.Policy {
       try await self._intercept(
         request: request,
         options: options,
-        name: "setIamPolicy",
+        idempotent: false,
         action: {
-          (r: GoogleIamV1.SetIamPolicyRequest, o: GoogleCloudGax.RequestOptions) async throws
-            -> GoogleIamV1.Policy
+          (r: GoogleIAMV1.SetIamPolicyRequest, o: GoogleCloudGax.RequestOptions) async throws
+            -> GoogleIAMV1.Policy
           in
           return try await self.inner.setIamPolicy(request: r, options: o)
         })
     }
 
     public func getIamPolicy(
-      request: GoogleIamV1.GetIamPolicyRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleIamV1.Policy {
+      request: GoogleIAMV1.GetIamPolicyRequest, options: GoogleCloudGax.RequestOptions
+    ) async throws -> GoogleIAMV1.Policy {
       try await self._intercept(
         request: request,
         options: options,
-        name: "getIamPolicy",
+        idempotent: false,
         action: {
-          (r: GoogleIamV1.GetIamPolicyRequest, o: GoogleCloudGax.RequestOptions) async throws
-            -> GoogleIamV1.Policy
+          (r: GoogleIAMV1.GetIamPolicyRequest, o: GoogleCloudGax.RequestOptions) async throws
+            -> GoogleIAMV1.Policy
           in
           return try await self.inner.getIamPolicy(request: r, options: o)
         })
     }
 
     public func testIamPermissions(
-      request: GoogleIamV1.TestIamPermissionsRequest, options: GoogleCloudGax.RequestOptions
-    ) async throws -> GoogleIamV1.TestIamPermissionsResponse {
+      request: GoogleIAMV1.TestIamPermissionsRequest, options: GoogleCloudGax.RequestOptions
+    ) async throws -> GoogleIAMV1.TestIamPermissionsResponse {
       try await self._intercept(
         request: request,
         options: options,
-        name: "testIamPermissions",
+        idempotent: false,
         action: {
-          (r: GoogleIamV1.TestIamPermissionsRequest, o: GoogleCloudGax.RequestOptions) async throws
-            -> GoogleIamV1.TestIamPermissionsResponse
+          (r: GoogleIAMV1.TestIamPermissionsRequest, o: GoogleCloudGax.RequestOptions) async throws
+            -> GoogleIAMV1.TestIamPermissionsResponse
           in
           return try await self.inner.testIamPermissions(request: r, options: o)
         })
@@ -455,7 +447,7 @@ extension Clients {
       try await self._intercept(
         request: request,
         options: options,
-        name: "getOperation",
+        idempotent: true,
         action: {
           (r: GoogleLongrunning.GetOperationRequest, o: GoogleCloudGax.RequestOptions) async throws
             -> GoogleLongrunning.Operation

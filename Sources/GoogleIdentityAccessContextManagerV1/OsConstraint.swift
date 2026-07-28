@@ -16,15 +16,15 @@
 
 import Foundation
 import GoogleCloudWkt
-import GoogleIdentityAccesscontextmanagerType
+import GoogleIdentityAccessContextManagerType
 
 /// A restriction on the OS type and version of devices making requests.
 public struct OsConstraint: Codable, Equatable, GoogleCloudWkt._AnyPackable,
   Sendable
 {
   /// Required. The allowed OS type.
-  public var osType: GoogleIdentityAccesscontextmanagerType.OsType =
-    GoogleIdentityAccesscontextmanagerType.OsType()
+  public var osType: GoogleIdentityAccessContextManagerType.OsType =
+    GoogleIdentityAccessContextManagerType.OsType()
 
   /// The minimum allowed OS version. If not set, any version of this OS
   /// satisfies the constraint. Format: `"major.minor.patch"`.
